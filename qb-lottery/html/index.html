@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐透抽奖系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+        }
+
+        body {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .lottery-container {
+            width: 460px;
+            background: linear-gradient(145deg, #181818, #111111);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lottery-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .countdown-box {
+            background: rgba(255, 60, 60, 0.08);
+            border-left: 4px solid #ff3c3c;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .countdown-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+        .countdown-time {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff3c3c;
+            margin-top: 2px;
+        }
+
+        .jackpot-box {
+            background: rgba(255, 215, 0, 0.08);
+            border-left: 4px solid #ffd700;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .jackpot-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .jackpot-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 4px;
+        }
+
+        .rule-box {
+            background: #1c1c1c;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #ddd;
+            position: relative;
+            cursor: help;
+            margin-bottom: 16px;
+        }
+
+        .rule-title {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .rule-content {
+            display: none;
+            position: absolute;
+            top: 45px;
+            left: 0;
+            width: 100%;
+            background: #0a0a0a;
+            padding: 12px;
+            border-radius: 8px;
+            z-index: 999;
+            line-height: 1.5;
+        }
+
+        .rule-box:hover .rule-content {
+            display: block;
+        }
+
+        .ticket-list {
+            background: #1c1c1c;
+            padding: 14px;
+            border-radius: 8px;
+            min-height: 55px;
+            text-align: center;
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .ticket-empty {
+            color: #888;
+        }
+
+        .ticket-numbers {
+            color: #00e676;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .lottery-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .lottery-input:focus {
+            background: #282828;
+            box-shadow: 0 0 0 2px rgba(255,215,0,0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top:5px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-buy {
+            background: #ffd700;
+            color: #111;
+        }
+
+        .btn-random {
+            background: #00c6ff;
+            color: #fff;
+        }
+
+        .btn-close {
+            background: #333;
+            color: #fff;
+        }
+
+        .error {
+            color: #ff4444;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 6px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lottery-container">
+    <div class="lottery-title">大乐透系统</div>
+
+    <div class="countdown-box">
+        <div class="countdown-label">距离开奖</div>
+        <div class="countdown-time" id="countdown">0 秒</div>
+    </div>
+
+    <div class="jackpot-box">
+        <div class="jackpot-label">当前奖池</div>
+        <div class="jackpot-amount" id="jackpot">$0</div>
+    </div>
+
+    <div class="rule-box">
+        <span class="rule-title">📜 游戏规则</span>
+        <div class="rule-content">
+            • 号码必须为 4 位纯数字<br>
+            • 每人最多购买 5 注号码<br>
+            • 开奖号码完全匹配即可中奖<br>
+            • 手动选号中奖奖金翻倍<br>
+            • 机选号码拥有独立中奖概率
+        </div>
+    </div>
+
+    <div class="ticket-list" id="ticketList">
+        <span class="ticket-empty">暂无购买号码</span>
+    </div>
+
+    <div class="input-group">
+        <input type="text" class="lottery-input" id="numberInput" maxlength="4" placeholder="请输入 4 位数字号码">
+        <div class="error" id="errorText">请输入有效的 4 位数字！</div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-buy" onclick="buyTicket()">手动购买</button>
+        <button class="btn btn-random" onclick="randomTicket()">机选号码</button>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-close" onclick="closeUI()">关闭界面</button>
+    </div>
+</div>
+
+<script>
+    let currentJackpot = 0;
+
+    window.addEventListener('message', (e) => {
+        const data = e.data;
+        if (data.action === 'open') {
+            document.body.style.display = 'flex';
+            currentJackpot = data.jackpot || 0;
+            document.getElementById('jackpot').innerText = `$${currentJackpot.toLocaleString()}`;
+        }
+        if (data.action === 'close') {
+            document.body.style.display = 'none';
+        }
+        if (data.action === 'tickets') {
+            const listEl = document.getElementById('ticketList');
+            const tickets = data.tickets || [];
+            if (tickets.length === 0) {
+                listEl.innerHTML = '<span class="ticket-empty">暂无购买号码</span>';
+            } else {
+                listEl.innerHTML = `<span class="ticket-numbers">${tickets.join(' ｜ ')}</span>`;
+            }
+        }
+        if (data.action === 'time') {
+            document.getElementById('countdown').innerText = data.time + ' 秒';
+        }
+    });
+
+    function buyTicket() {
+        const input = document.getElementById('numberInput');
+        const error = document.getElementById('errorText');
+        const val = input.value.trim();
+        if (!/^\d{4}$/.test(val)) {
+            error.style.display = 'block';
+            return;
+        }
+        error.style.display = 'none';
+        fetch(`https://${GetParentResourceName()}/buy`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ number: val, type: 'manual' })
+        });
+        input.value = '';
+    }
+
+    function randomTicket() {
+        fetch(`https://${GetParentResourceName()}/random`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    function closeUI() {
+        fetch(`https://${GetParentResourceName()}/close`, { method: 'POST' });
+        document.body.style.display = 'none';
+    }
+
+    document.onkeyup = (e) => {
+        if (e.key === 'Escape') closeUI();
+    };
+</script>
+</body>
+</html>
