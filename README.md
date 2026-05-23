@@ -1,9 +1,10 @@
-#By:SupVisionG QQ:1455368295
+<img width="400" height="225" alt="Desktop 2026 05 23 - 16 59 30 04" src="https://github.com/user-attachments/assets/829cf42a-3dee-43b4-aba1-5b069c65d111" />#By:SupVisionG QQ:1455368295
 ### # ESX Qbcore 大乐透彩票系统 README
 ## 资源介绍
 ##
 本资源为 FiveM ESX Qbcore框架全自动大乐透彩票系统，全程无需管理员手动操作，系统自动倒计时、自动开奖、自动结算奖金、自动累加奖池、数据自动入库保存。支持手动选号、随机机选、手动中奖翻倍、封盘限购等完整彩票玩法，配套独立NUI可视化界面，适配所有ESX Legacy/QBcore服务器。
-[![](https://link.jiyiho.cn/orfile/view.php/47533bb41aaea3c91b8df08475a6b7d2.gif)](1)
+<img width="400" height="225" alt="Desktop 2026 05 23 - 16 59 30 04" src="https://github.com/user-attachments/assets/e699ec50-9e7b-4d14-a820-5e50002ca190" />
+
 ## 资源信息
 
 - 适配框架：ESX Legacy QBcore
