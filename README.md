@@ -1,4 +1,4 @@
-<img width="400" height="225" alt="Desktop 2026 05 23 - 16 59 30 04" src="https://github.com/user-attachments/assets/829cf42a-3dee-43b4-aba1-5b069c65d111" />#By:SupVisionG QQ:1455368295
+#By:SupVisionG QQ:1455368295
 ### # ESX Qbcore 大乐透彩票系统 README
 ## 资源介绍
 ##
